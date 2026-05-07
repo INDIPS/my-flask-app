@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>La Quintessence — Menu</title>
+  <style>
+    :root{
+      --bg:#f3f5f7; --card:#ffffff; --accent:#b88b5a; --muted:#6b7280;
+      --glass: rgba(255,255,255,0.7);
+      --radius:14px;
+      --max-width:1100px;
+      --star: #f5b942;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+      background: linear-gradient(180deg,#eef2f6 0%, #f8fafc 100%);
+      color:#111827; padding:40px;
+    }
+    .menu-wrap{width:100%; max-width:var(--max-width); display:grid; grid-template-columns:1fr 360px; gap:32px;}
+    .card{background:var(--card); border-radius:var(--radius); padding:34px; box-shadow:0 10px 30px rgba(17,24,39,0.08);}    
+    header{display:flex; align-items:center; gap:20px;}
+    .logo{width:84px; height:84px; border-radius:12px; background:linear-gradient(135deg,var(--accent), #e0b38a); display:flex; align-items:center; justify-content:center; color:white; font-weight:700; font-size:22px;}
+    .title h1{margin:0; font-size:20px; letter-spacing:0.6px}
+    .title p{margin:4px 0 0 0; color:var(--muted); font-size:13px}
+    .stars{display:flex; gap:6px; margin-top:8px}
+    .star{color:var(--star); font-size:16px}
+
+    /* Menu list */
+    .sections{margin-top:20px}
+    .section{margin-bottom:22px}
+    .section h2{font-size:14px; margin:0 0 12px 0; text-transform:uppercase; letter-spacing:1.4px; color:var(--muted)}
+    .items{display:grid; grid-template-columns:1fr 140px; gap:10px 18px; align-items:start}
+    .item-name{font-weight:600}
+    .item-desc{color:var(--muted); font-size:13px; margin-top:6px}
+    .price{text-align:right; font-weight:700}
+
+    /* Side panel */
+    .side{position:relative}
+    .side .panel{background:linear-gradient(180deg, rgba(184,139,90,0.06), rgba(184,139,90,0.02)); border-radius:var(--radius); padding:22px}
+    .side .panel h3{margin:0 0 10px 0}
+    .tags{display:flex; gap:8px; flex-wrap:wrap}
+    .tag{background:var(--glass); border-radius:999px; padding:6px 10px; font-size:13px; color:var(--muted)}
+    .callout{margin-top:16px; background:#fff; border-radius:10px; padding:12px; box-shadow:0 6px 18px rgba(17,24,39,0.04)}
+
+    /* Responsive */
+    @media (max-width:980px){.menu-wrap{grid-template-columns:1fr; padding:0 18px} .side{order:-1} .items{grid-template-columns:1fr 120px}}
+    @media (max-width:420px){.items{grid-template-columns:1fr 90px} .logo{width:64px;height:64px}}
+    /* Print-friendly */
+    @media print{body{background:white} .menu-wrap{box-shadow:none} .card{box-shadow:none} .side{display:none}}
+  </style>
+</head>
+<body>
+  <div class="menu-wrap">
+    <main class="card">
+      <header>
+        <div class="logo">LQ</div>
+        <div class="title">
+          <h1>La Quintessence</h1>
+          <p>Contemporary French cuisine · 5-Star Dining Experience</p>
+          <div class="stars" aria-hidden>
+            <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="sections">
+        <section class="section">
+          <h2>Starters</h2>
+          <div class="items">
+            <div>
+              <div class="item-name">Cured Salmon, Citrus Vinaigrette</div>
+              <div class="item-desc">Hand-sliced Atlantic salmon, dill oil, grapefruit pearls.</div>
+            </div>
+            <div class="price">$22</div>
+
+            <div>
+              <div class="item-name">Foie Gras Torchon</div>
+              <div class="item-desc">Quince compote, toasted brioche, aged balsamic.</div>
+            </div>
+            <div class="price">$36</div>
+
+            <div>
+              <div class="item-name">Wild Mushroom Consommé</div>
+              <div class="item-desc">Clear mushroom broth, truffle foam, chive oil.</div>
+            </div>
+            <div class="price">$18</div>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>Mains</h2>
+          <div class="items">
+            <div>
+              <div class="item-name">Herb-Crusted Lamb Rack</div>
+              <div class="item-desc">Roasted root purée, rosemary jus, seasonal vegetables.</div>
+            </div>
+            <div class="price">$48</div>
+
+            <div>
+              <div class="item-name">Seared Black Cod</div>
+              <div class="item-desc">Miso glaze, charred baby leeks, yuzu beurre blanc.</div>
+            </div>
+            <div class="price">$44</div>
+
+            <div>
+              <div class="item-name">Truffle Risotto</div>
+              <div class="item-desc">Arborio rice, shaved black truffle, Parmigiano-Reggiano.</div>
+            </div>
+            <div class="price">$32</div>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>Desserts</h2>
+          <div class="items">
+            <div>
+              <div class="item-name">Chocolate Fondant</div>
+              <div class="item-desc">Molten dark chocolate, hazelnut praline, Madagascan vanilla.</div>
+            </div>
+            <div class="price">$16</div>
+
+            <div>
+              <div class="item-name">Lemon Verbena Tart</div>
+              <div class="item-desc">Crisp pastry, lemon curd, basil meringue.</div>
+            </div>
+            <div class="price">$14</div>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>Wine & Spirits</h2>
+          <div class="items">
+            <div>
+              <div class="item-name">Chardonnay, Burgundy (glass)</div>
+              <div class="item-desc">Buttery, subtle oak, citrus finish.</div>
+            </div>
+            <div class="price">$18</div>
+
+            <div>
+              <div class="item-name">Vintage Cabernet (glass)</div>
+              <div class="item-desc">Full-bodied, blackcurrant, cedar notes.</div>
+            </div>
+            <div class="price">$22</div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <aside class="side">
+      <div class="panel">
+        <h3>Chef's Tasting</h3>
+        <p style="color:var(--muted);margin:6px 0 12px 0;">A curated multi-course experience showcasing our seasonal best. Ask your server for pairing options.</p>
+        <div class="tags">
+          <div class="tag">Chef's Recommendation</div>
+          <div class="tag">Seasonal</div>
+          <div class="tag">Tasting Menu</div>
+        </div>
+
+        <div class="callout">
+          <strong>Private Dining</strong>
+          <p style="margin:8px 0 0 0;color:var(--muted);font-size:13px">Reserve our private room for exclusive events and bespoke menus.</p>
+        </div>
+      </div>
+    </aside>
+  </div>
+</body>
+</html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Designable Multilanguage Page Builder</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&family=Noto+Sans+Display&display=swap" rel="stylesheet">
+  <style>
+    :root{--ui-bg:#0f1724;--panel:#0b1220;--muted:#9aa4b2;--accent:#60a5fa}
+    *{box-sizing:border-box;font-family:system-ui,Segoe UI,Roboto,"Noto Sans",sans-serif}
+    body{margin:0;background:linear-gradient(180deg,#071028 0,#071021 100%);color:#e6eef6}
+    .wrap{max-width:1100px;margin:24px auto;padding:18px;display:grid;grid-template-columns:320px 1fr;gap:18px}
+    .panel{background:rgba(255,255,255,0.03);padding:12px;border-radius:8px}
+    .toolbar{display:flex;flex-direction:column;gap:8px}
+    label{font-size:12px;color:var(--muted);margin-bottom:4px;display:block}
+    input,select,button,textarea{width:100%;padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit}
+    .row{display:flex;gap:8px}
+    .row > *{flex:1}
+    .builder{min-height:640px;display:flex;flex-direction:column}
+    .editor{flex:1;background:#fff;color:#000;border-radius:6px;padding:18px;overflow:auto}
+    .editor [contenteditable]{min-height:520px;outline:none}
+    .controls{display:flex;gap:8px;flex-wrap:wrap}
+    .small{padding:6px;font-size:13px}
+    .previewWrap{margin-top:12px}
+    .preview{width:100%;height:360px;border-radius:6px;border:1px dashed rgba(255,255,255,0.06);background:#fff}
+    .muted{color:var(--muted);font-size:13px}
+    footer{margin-top:12px;color:var(--muted);font-size:12px;text-align:right}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="panel toolbar">
+      <div>
+        <label for="lang">SMTP Document language (BCP47)</label>
+        <input id="lang" placeholder="e.g. en, ru, zh, ar, hi" value="en" />
+      </div>
+      <div class="row">
+        <div>
+          <label for="dir">Direction</label>
+          <select id="dir">
+            <option value="auto">auto</option>
+            <option value="ltr">ltr</option>
+            <option value="rtl">rtl</option>
+          </select>
+        </div>
+        <div>
+          <label for="font">Font</label>
+          <select id="font">
+            <option value="Noto Sans, system-ui, sans-serif">Noto Sans (wide)</option>
+            <option value="Segoe UI, system-ui, sans-serif">Segoe UI</option>
+            <option value="Roboto, system-ui, sans-serif">Roboto</option>
+            <option value="serif">Serif</option>
+            <option value="monospace">Monospace</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label>Insert</label>
+        <div class="row">
+          <button class="small" id="h1">Heading</button>
+          <button class="small" id="p">Paragraph</button>
+          <button class="small" id="img">Image</button>
+          <button class="small" id="btn">Button</button>
+        </div>
+      </div>
+
+      <div>
+        <label>Format</label>
+        <div class="row">
+          <button class="small" id="bold">Bold</button>
+          <button class="small" id="italic">Italic</button>
+          <button class="small" id="link">Link</button>
+          <button class="small" id="clear">Clear</button>
+        </div>
+      </div>
+
+      <div>
+        <label>File</label>
+        <div class="row">
+          <button id="export" class="small">Export HTML</button>
+          <button id="download" class="small">Download .html</button>
+        </div>
+      </div>
+
+      <div>
+        <label>Save / Load (local)</label>
+        <div class="row">
+          <button id="save" class="small">Save</button>
+          <button id="load" class="small">Load</button>
+        </div>
+      </div>
+
+      <div>
+        <label>Quick templates</label>
+        <select id="templates">
+          <option value="">— choose —</option>
+          <option value="<h1>{{title}}</h1><p>{{text}}</p>">Simple</option>
+          <option value="<header><h1>{{title}}</h1></header><main><p>{{text}}</p></main><footer>©</footer>">Site</option>
+        </select>
+      </div>
+
+      <div class="previewWrap">
+        <div class="muted">Live preview</div>
+        <iframe id="preview" class="preview"></iframe>
+      </div>
+
+      <footer>UTF-8 • supports all scripts • set lang & dir</footer>
+    </div>
+
+    <div class="panel builder">
+      <div class="controls" style="margin-bottom:8px">
+        <div style="flex:1">
+          <label class="muted">Page title</label>
+          <input id="title" placeholder="Page title" />
+        </div>
+        <div style="width:140px">
+          <label class="muted">Font size</label>
+          <select id="size">
+            <option value="16px">16px</option>
+            <option value="18px" selected>18px</option>
+            <option value="20px">20px</option>
+            <option value="24px">24px</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="editor">
+        <div id="content" contenteditable="true" lang="en" style="min-height:520px;font-size:18px;font-family:Noto Sans, system-ui;">
+          <h1>Welcome</h1>
+          <p>SMTP server is right now is launched thire first project in front of your site.</p>
+        </div>
+      </div>
+
+      <div style="margin-top:8px;display:flex;gap:8px">
+        <button id="previewBtn" class="small" style="flex:1">Refresh Preview</button>
+        <button id="toggleSource" class="small">View Source</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const content = document.getElementById('content');
+    const langInput = document.getElementById('lang');
+    const dirInput = document.getElementById('dir');
+    const fontSelect = document.getElementById('font');
+    const sizeSelect = document.getElementById('size');
+    const preview = document.getElementById('preview');
+    const titleInput = document.getElementById('title');
+
+    function applyAttrs(){
+      const lang = (langInput.value || '').trim() || 'en';
+      content.setAttribute('lang', lang);
+      document.documentElement.lang = lang;
+      const dir = dirInput.value === 'auto' ? (detectDir(content.innerText) || 'ltr') : dirInput.value;
+      content.style.direction = dir;
+      const font = fontSelect.value;
+      content.style.fontFamily = font;
+      content.style.fontSize = sizeSelect.value;
+      refreshPreview();
+    }
+
+    function detectDir(text){
+      // simple heuristics: check for strong rtl chars
+      const rtl = /[\u0591-\u07FF\uFB1D-\uFDFD\uFE70-\uFEFC]/;
+      return rtl.test(text) ? 'rtl' : 'ltr';
+    }
+
+    function insertHTMLAtCursor(html){
+      const sel = window.getSelection();
+      if(!sel.rangeCount) return;
+      const range = sel.getRangeAt(0);
+      range.deleteContents();
+      const el = document.createElement('div');
+      el.innerHTML = html;
+      const frag = document.createDocumentFragment();
+      let node;
+      while((node = el.firstChild)) frag.appendChild(node);
+      range.insertNode(frag);
+      // move cursor after inserted
+      range.collapse(false);
+      sel.removeAllRanges();
+      sel.addRange(range);
+      content.focus();
+      applyAttrs();
+    }
+
+    document.getElementById('h1').onclick = ()=> insertHTMLAtCursor('<h1>'+escapeHtml(prompt('Heading text','Heading')||'')+'</h1>');
+    document.getElementById('p').onclick  = ()=> insertHTMLAtCursor('<p>'+escapeHtml(prompt('Paragraph text','Paragraph...')||'')+'</p>');
+    document.getElementById('img').onclick= ()=>{
+      const url = prompt('Image URL');
+      if(url) insertHTMLAtCursor('<img src="'+encodeURI(url)+'" style="max-width:100%;display:block;margin:8px 0">');
+    };
+    document.getElementById('btn').onclick= ()=>{
+      const txt = escapeHtml(prompt('Button text','Click'));
+      insertHTMLAtCursor('<a role="button" style="display:inline-block;padding:8px 12px;background:#60a5fa;color:#fff;border-radius:6px;text-decoration:none;margin:6px 0">'+txt+'</a>');
+    };
+
+    document.getElementById('bold').onclick = ()=> document.execCommand('bold');
+    document.getElementById('italic').onclick = ()=> document.execCommand('italic');
+    document.getElementById('link').onclick = ()=>{
+      const url = prompt('URL','https://');
+      if(url) document.execCommand('createLink',false,url);
+    };
+    document.getElementById('clear').onclick = ()=> { content.innerHTML = ''; applyAttrs(); };
+
+    langInput.onchange = applyAttrs;
+    dirInput.onchange = applyAttrs;
+    fontSelect.onchange = applyAttrs;
+    sizeSelect.onchange = applyAttrs;
+    titleInput.oninput = applyAttrs;
+
+    document.getElementById('templates').onchange = function(){
+      const tpl = this.value;
+      if(!tpl) return;
+      const t = tpl.replace('{{title}}', escapeHtml(prompt('Title','My page')||''))
+                   .replace('{{text}}', escapeHtml(prompt('Text','Hello world')||''));
+      content.innerHTML = t;
+      applyAttrs();
+      this.value = '';
+    };
+
+    function buildDocumentHTML(){
+      const lang = (langInput.value || '').trim() || 'en';
+      const dirAttr = dirInput.value === 'auto' ? '' : ' dir="'+dirInput.value+'"';
+      const title = escapeHtml(titleInput.value || 'Document');
+      const css = `
+        body{font-family:${fontSelect.value};padding:24px;color:#111}
+        img{max-width:100%}
+      `;
+      return `<!doctype html>
+<html lang="${lang}"${dirAttr}>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>${title}</title>
+  <style>${css}</style>
+</head>
+<body>
+${content.innerHTML}
+</body>
+</html>`;
+    }
+
+    function refreshPreview(){
+      const doc = buildDocumentHTML();
+      preview.srcdoc = doc;
+    }
+
+    document.getElementById('previewBtn').onclick = ()=> refreshPreview();
+
+    document.getElementById('export').onclick = ()=>{
+      const doc = buildDocumentHTML();
+      const w = window.open('','_blank');
+      w.document.write(doc);
+      w.document.close();
+    };
+
+    document.getElementById('download').onclick = ()=>{
+      const doc = buildDocumentHTML();
+      const blob = new Blob([doc],{type:'text/html;charset=utf-8'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = (titleInput.value || 'page') + '.html';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    };
+
+    // Save / Load local
+    document.getElementById('save').onclick = ()=>{
+      const payload = {title:titleInput.value,lang:langInput.value,dir:dirInput.value,font:fontSelect.value,size:sizeSelect.value,html:content.innerHTML};
+      localStorage.setItem('designable-page', JSON.stringify(payload));
+      alert('Saved locally');
+    };
+    document.getElementById('load').onclick = ()=>{
+      const raw = localStorage.getItem('designable-page');
+      if(!raw){ alert('No saved page'); return; }
+      const obj = JSON.parse(raw);
+      titleInput.value = obj.title || '';
+      langInput.value = obj.lang || 'en';
+      dirInput.value = obj.dir || 'auto';
+      fontSelect.value = obj.font || fontSelect.value;
+      sizeSelect.value = obj.size || sizeSelect.value;
+      content.innerHTML = obj.html || '';
+      applyAttrs();
+      refreshPreview();
+    };
+
+    // Toggle source viewing
+    let showingSource = false;
+    document.getElementById('toggleSource').onclick = ()=>{
+      if(!showingSource){
+        const pre = document.createElement('textarea');
+        pre.id = 'sourceView';
+        pre.style.width = '100%';
+        pre.style.height = '520px';
+        pre.value = content.innerHTML;
+        content.parentNode.replaceChild(pre, content);
+      } else {
+        const src = document.getElementById('sourceView');
+        content.innerHTML = src.value;
+        src.parentNode.replaceChild(content, src);
+      }
+      showingSource = !showingSource;
+      applyAttrs();
+    };
+
+    // small helpers
+    function escapeHtml(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+    // init
+    applyAttrs();
+    refreshPreview();
+
+    // keyboard shortcuts (Ctrl+S download)
+    window.addEventListener('keydown', (e)=>{
+      if((e.ctrlKey||e.metaKey) && e.key.toLowerCase() === 's'){ e.preventDefault(); document.getElementById('download').click(); }
+    });
+  </script>
+</body>
+</html>
+```
