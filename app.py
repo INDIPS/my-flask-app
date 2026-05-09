@@ -1,8 +1,6 @@
 import os
 import subprocess
 import json
-import urllib.request
-import urllib.error
 
 import pyttsx3
 
@@ -10,6 +8,11 @@ try:
     import psutil  # type: ignore
 except ImportError:
     psutil = None  # type: ignore
+
+try:
+    from openai import OpenAI
+except ImportError:
+    OpenAI = None
 
 from pathlib import Path
 from flask import Flask, jsonify, request, send_from_directory
@@ -43,7 +46,7 @@ except Exception as e:
 
 # Online AI configuration (Set these in your environment variables)
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
-OPENAI_MODEL = os.environ.get('OPENAI_MODEL', 'gpt-3.5-turbo')
+OPENAI_MODEL = os.environ.get('OPENAI_MODEL', 'gpt-4')
 OPENAI_API_BASE = os.environ.get('OPENAI_API_BASE', 'https://api.openai.com/v1')
 OPENAI_SYSTEM_PROMPT = os.environ.get(
     'OPENAI_SYSTEM_PROMPT',
@@ -66,33 +69,63 @@ def speak(text):
             pass
 
 def query_ai_server(prompt):
-    """Send the user prompt to the online AI server."""
+    """Send the user prompt to the online AI server using OpenAI Python SDK with fallback models."""
     if not OPENAI_API_KEY:
         return 'Online AI server is not configured. Please set the OPENAI_API_KEY environment variable.'
 
-    payload = {
-        'model': OPENAI_MODEL,
-        'messages': [
-            {'role': 'system', 'content': OPENAI_SYSTEM_PROMPT},
-            {'role': 'user', 'content': prompt},
-        ],
-        'temperature': 0.6,
-        'max_tokens': 500,
-    }
-    data = json.dumps(payload).encode('utf-8')
-    url = f"{OPENAI_API_BASE}/chat/completions"
-    headers = {
-        'Content-Type': 'application/json',
-        'Authorization': f'Bearer {OPENAI_API_KEY}',
-    }
+    if OpenAI is None:
+        return 'OpenAI Python SDK is not installed. Please install it with pip install openai.'
 
-    try:
-        request_obj = urllib.request.Request(url, data=data, headers=headers, method='POST')
-        with urllib.request.urlopen(request_obj, timeout=30) as response:
-            result = json.loads(response.read().decode('utf-8'))
-            return result['choices'][0]['message']['content'].strip()
-    except Exception as e:
-        return f"AI request failed: {str(e)}"
+    # Model fallback order: preferred model, then gpt-5.5, then gpt-3.5-turbo
+    models_to_try = [OPENAI_MODEL, 'gpt-5.5', 'gpt-3.5-turbo']
+    # Remove duplicates in case OPENAI_MODEL is already one of the fallbacks
+    models_to_try = list(dict.fromkeys(models_to_try))
+
+    for model in models_to_try:
+        try:
+            client = OpenAI(api_key=OPENAI_API_KEY)
+            response = client.responses.create(
+                model=model,
+                input=[
+                    {
+                        'role': 'system',
+                        'content': OPENAI_SYSTEM_PROMPT,
+                    },
+                    {
+                        'role': 'user',
+                        'content': prompt,
+                    },
+                ],
+                temperature=0.6,
+                max_output_tokens=500,
+            )
+
+            # The outputs can be combined text or structured objects.
+            if hasattr(response, 'output_text') and response.output_text:
+                return response.output_text.strip()
+
+            # Fallback for structured output
+            if getattr(response, 'output', None):
+                chunks = []
+                for item in response.output:
+                    if getattr(item, 'content', None):
+                        for content_item in item.content:
+                            if getattr(content_item, 'text', None):
+                                chunks.append(content_item.text)
+                if chunks:
+                    return ' '.join(chunks).strip()
+
+            return 'No valid response received from the AI server.'
+        except Exception as e:
+            error_msg = str(e).lower()
+            # If it's a model not found error, try the next model
+            if 'model' in error_msg and ('not found' in error_msg or 'does not exist' in error_msg):
+                continue
+            # For other errors (like quota, auth), don't retry
+            return f"AI request failed: {str(e)}"
+
+    # If all models failed
+    return 'All AI models are currently unavailable. Please try again later.'
 
 def process_command(command):
     """Determine if command is local, system-related, or needs AI."""
