@@ -13,8 +13,19 @@ except ImportError:
 
 from pathlib import Path
 from flask import Flask, jsonify, request, send_from_directory
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__, static_folder=".", static_url_path="")
+
+# File upload configuration
+UPLOAD_FOLDER = 'uploads'
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'mp4', 'mp3', 'doc', 'docx', 'xls', 'xlsx', 'zip', 'csv', 'json'}
+
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024  # 50MB max file size
 
 # Initialize TTS engine
 try:
@@ -106,9 +117,42 @@ def process_command(command):
     # Default to AI Assistant
     return query_ai_server(command)
 
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 @app.route("/")
 def index():
     return send_from_directory(Path.cwd(), "index.html")
+
+@app.route("/uploads/<filename>")
+def serve_upload(filename):
+    return send_from_directory(UPLOAD_FOLDER, secure_filename(filename))
+
+@app.route("/api/upload", methods=["POST"])
+def upload_file():
+    try:
+        if 'file' not in request.files:
+            return jsonify(error="No file provided"), 400
+        
+        file = request.files['file']
+        
+        if file.filename == '':
+            return jsonify(error="No file selected"), 400
+        
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(filepath)
+            
+            return jsonify(
+                success=True,
+                filename=filename,
+                url=f"/uploads/{filename}"
+            ), 200
+        else:
+            return jsonify(error="File type not allowed"), 400
+    except Exception as e:
+        return jsonify(error=str(e)), 500
 
 @app.route("/api/command", methods=["POST"])
 def command():

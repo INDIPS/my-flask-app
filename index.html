@@ -255,7 +255,13 @@
                 >
                 <button id="sendBtn">Send</button>
                 <button id="voiceBtn" class="mic-button" title="Voice Input">🎤</button>
+                <button id="uploadBtn" class="mic-button" title="Upload File">📁</button>
+                <button id="cameraBtn" class="mic-button" title="Camera">📷</button>
             </div>
+            <input type="file" id="fileInput" style="display: none;" accept="*">
+            <input type="file" id="cameraInput" style="display: none;" accept="image/*" capture="environment">
+            <video id="cameraPreview" style="display: none; width: 100%; max-width: 300px; margin-top: 10px; border-radius: 10px;"></video>
+            <canvas id="cameraCanvas" style="display: none;"></canvas>
         </div>
 
         <div class="command-hint">
@@ -429,6 +435,105 @@
             } else {
                 alert('Voice input not supported in your browser');
             }
+        });
+
+        // File Upload Button
+        const uploadBtn = document.getElementById('uploadBtn');
+        const fileInput = document.getElementById('fileInput');
+        const cameraBtn = document.getElementById('cameraBtn');
+        const cameraInput = document.getElementById('cameraInput');
+
+        uploadBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            addMessage(`Uploading file: ${file.name}`, 'user');
+            showLoading();
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                removeLoading();
+                const data = await response.json();
+
+                if (response.ok) {
+                    addMessage(`✅ File uploaded successfully: ${data.filename}`, 'ai');
+                    // Display image if it's an image file
+                    if (file.type.startsWith('image/')) {
+                        const imgElement = document.createElement('img');
+                        imgElement.src = data.url;
+                        imgElement.style.maxWidth = '100%';
+                        imgElement.style.borderRadius = '8px';
+                        imgElement.style.marginTop = '10px';
+                        const lastMsg = chatBox.lastChild;
+                        lastMsg.appendChild(imgElement);
+                    }
+                } else {
+                    addMessage(`❌ Upload failed: ${data.error}`, 'ai');
+                }
+            } catch (error) {
+                removeLoading();
+                addMessage('Error uploading file. Please try again.', 'ai');
+                console.error('Upload error:', error);
+            }
+
+            fileInput.value = '';
+        });
+
+        // Camera Button
+        cameraBtn.addEventListener('click', () => {
+            cameraInput.click();
+        });
+
+        cameraInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            addMessage(`Uploading photo from camera: ${file.name}`, 'user');
+            showLoading();
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                removeLoading();
+                const data = await response.json();
+
+                if (response.ok) {
+                    addMessage(`✅ Photo uploaded successfully: ${data.filename}`, 'ai');
+                    // Display the captured image
+                    const imgElement = document.createElement('img');
+                    imgElement.src = data.url;
+                    imgElement.style.maxWidth = '100%';
+                    imgElement.style.borderRadius = '8px';
+                    imgElement.style.marginTop = '10px';
+                    const lastMsg = chatBox.lastChild;
+                    lastMsg.appendChild(imgElement);
+                } else {
+                    addMessage(`❌ Photo upload failed: ${data.error}`, 'ai');
+                }
+            } catch (error) {
+                removeLoading();
+                addMessage('Error uploading photo. Please try again.', 'ai');
+                console.error('Camera upload error:', error);
+            }
+
+            cameraInput.value = '';
         });
 
         // Auto-focus input
