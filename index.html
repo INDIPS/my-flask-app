@@ -343,6 +343,12 @@
                 // Text-to-speech
                 if ('speechSynthesis' in window) {
                     const utterance = new SpeechSynthesisUtterance(result);
+                    // Try to pick a natural/neural voice
+                    const voices = window.speechSynthesis.getVoices();
+                    const naturalVoice = voices.find(v => 
+                        (v.name.includes('Natural') || v.name.includes('Google')) && v.lang.startsWith('en')
+                    );
+                    if (naturalVoice) utterance.voice = naturalVoice;
                     speechSynthesis.speak(utterance);
                 }
                 return;
@@ -367,6 +373,12 @@
                 // Text-to-speech
                 if ('speechSynthesis' in window) {
                     const utterance = new SpeechSynthesisUtterance(data.response);
+                    // Try to pick a natural/neural voice
+                    const voices = window.speechSynthesis.getVoices();
+                    const naturalVoice = voices.find(v => 
+                        (v.name.includes('Natural') || v.name.includes('Google')) && v.lang.startsWith('en')
+                    );
+                    if (naturalVoice) utterance.voice = naturalVoice;
                     speechSynthesis.speak(utterance);
                 }
             } catch (error) {
