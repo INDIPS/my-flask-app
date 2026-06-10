@@ -1,0 +1,3 @@
+"""
+Hindi Land backend initialization
+"""
